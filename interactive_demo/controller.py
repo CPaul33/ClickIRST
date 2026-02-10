@@ -18,10 +18,10 @@ class InteractiveController:
         self.object_count = 0
         self._result_mask = None
         self._init_mask = None
-        self._postprocessed_mask = None  # 存储后处理后的掩码
-        self._extended_pixels = None  # 存储新增的前景像素
-        self.enable_postprocessing = False  # 后处理功能开关
-        self.edge_threshold = 0.5  # 外边缘灰度值阈值
+        self._postprocessed_mask = None  # Store mask after post-processing
+        self._extended_pixels = None  # Store newly added foreground pixels
+        self.enable_postprocessing = False  # Switch for post-processing function
+        self.edge_threshold = 0.5  # Threshold for outer edge gray value
 
         self.image = None
         self.predictor = None
@@ -31,8 +31,8 @@ class InteractiveController:
         self.reset_predictor()
 
     def _enforce_clicks_on_bool_mask(self, mask):
-        """强制点击约束到布尔掩码：
-        - 正样本点赋值为 True；负样本点赋值为 False
+        """Enforce click constraints on boolean mask:
+        - Positive clicks set to True; Negative clicks set to False
         """
         if mask is None:
             return mask
@@ -45,8 +45,8 @@ class InteractiveController:
         return mask
 
     def _enforce_clicks_on_label_mask(self, mask, fg_value, bg_value=0):
-        """强制点击约束到标签掩码：
-        - 正样本点赋值为前景标签；负样本点赋值为背景标签
+        """Enforce click constraints on label mask:
+        - Positive clicks set to foreground label; Negative clicks set to background label
         """
         if mask is None:
             return mask
@@ -73,12 +73,12 @@ class InteractiveController:
     def set_prob_thresh(self, prob_thresh):
         self.prob_thresh = float(prob_thresh)
         if self.image is not None:
-            # 概率阈值变化会影响原始掩码与平均灰度统计，需重新计算后处理结果
+            # Changes in probability threshold affect original mask and average gray statistics, need to re-calculate post-processing results
             self._update_postprocessed_mask()
             self.update_image_callback()
 
     def _update_postprocessed_mask(self):
-        """更新后处理掩码"""
+        """Update post-processed mask"""
         if not self.enable_postprocessing or self.image is None:
             self._postprocessed_mask = None
             self._extended_pixels = None
@@ -90,11 +90,11 @@ class InteractiveController:
             self._extended_pixels = None
             return
 
-        # 获取原始掩码，并在后处理之前先施加点击强约束
+        # Get original mask, and enforce strong click constraints before post-processing
         original_mask = current_prob > self.prob_thresh
         original_mask = self._enforce_clicks_on_bool_mask(original_mask)
 
-        # 计算前景区域的平均灰度值
+        # Calculate average gray value of foreground area
         gray_image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
         foreground_pixels = gray_image[original_mask]
         if len(foreground_pixels) == 0:
@@ -104,16 +104,16 @@ class InteractiveController:
 
         avg_gray_value = np.mean(foreground_pixels)
 
-        # 计算“外边缘”：对前景做一次膨胀，取膨胀结果与原掩码的差集，得到紧邻前景的一圈背景像素
+        # Calculate "outer edge": Dilate foreground once, take difference between dilated result and original mask to get a ring of background pixels adjacent to foreground
         kernel = np.ones((3, 3), np.uint8)
         dilated = cv2.dilate(original_mask.astype(np.uint8), kernel, iterations=1).astype(bool)
         outer_border = np.logical_and(dilated, np.logical_not(original_mask))
 
-        # 初始化扩展掩码与新增像素标记
+        # Initialize extended mask and new pixel markers
         extended_mask = original_mask.copy()
         extended_pixels = np.zeros_like(original_mask, dtype=bool)
 
-        # 向量化判断边缘像素是否需要纳入前景
+        # Vectorized check if edge pixels need to be included in foreground
         if avg_gray_value > 0:
             by, bx = np.where(outer_border)
             if by.size > 0:
@@ -123,16 +123,16 @@ class InteractiveController:
                 if np.any(take):
                     extended_mask[by[take], bx[take]] = True
                     extended_pixels[by[take], bx[take]] = True
-                    print(f"后处理算法扩展了 {int(np.count_nonzero(take))} 个像素")
+                    print(f"Post-processing algorithm extended {int(np.count_nonzero(take))} pixels")
                 else:
-                    print("后处理算法扩展了 0 个像素")
+                    print("Post-processing algorithm extended 0 pixels")
             else:
-                print("后处理算法扩展了 0 个像素")
+                print("Post-processing algorithm extended 0 pixels")
         else:
-            # 极端情况：前景平均灰度为0，无法比较，保持原样
-            print("前景平均灰度为0，未进行边缘扩展")
+            # Extreme case: Foreground average gray is 0, cannot compare, keep as is
+            print("Foreground average gray is 0, no edge extension performed")
 
-        # 在后处理之后再次施加点击强约束，防止扩展覆盖负点或清除正点
+        # Enforce strong click constraints again after post-processing to prevent extension from covering negative points or clearing positive points
         self._postprocessed_mask = self._enforce_clicks_on_bool_mask(extended_mask)
         self._extended_pixels = extended_pixels
 
@@ -259,7 +259,7 @@ class InteractiveController:
             else:
                 mask_to_apply = self._enforce_clicks_on_bool_mask(self.current_object_prob > self.prob_thresh)
             result_mask[mask_to_apply] = self.object_count + 1
-            # 标签级别保障点击约束
+            # Ensure click constraints at label level
             result_mask = self._enforce_clicks_on_label_mask(result_mask, fg_value=self.object_count + 1)
         return result_mask
 
@@ -267,7 +267,7 @@ class InteractiveController:
         if self.image is None:
             return None
 
-        # 使用后处理掩码或原始掩码
+        # Use post-processed mask or original mask
         if self.enable_postprocessing and self._postprocessed_mask is not None:
             results_mask_for_vis = self._result_mask.copy()
             enforced = self._enforce_clicks_on_bool_mask(self._postprocessed_mask.copy())
@@ -285,12 +285,11 @@ class InteractiveController:
             results_mask_for_vis[np.logical_not(total_mask)] = 0
             vis = draw_with_blend_and_clicks(vis, mask=results_mask_for_vis, alpha=alpha_blend)
 
-        # 将新增像素的淡红色高亮放在所有掩码叠加之后，避免被后续绘制覆盖
+        # Place light red highlight of new pixels after all mask overlays to avoid being covered by subsequent drawing
         if self.enable_postprocessing and self._extended_pixels is not None and np.any(self._extended_pixels):
             red_overlay = np.zeros_like(vis)
-            red_overlay[self._extended_pixels] = [255, 128, 128]  # 淡红色
+            red_overlay[self._extended_pixels] = [255, 128, 128]  # Light red
             vis = cv2.addWeighted(vis, 1.0, red_overlay, 0.5, 0)
-            print("后处理效果已应用，新增像素用淡红色标记")
+            print("Post-processing effect applied, new pixels marked in light red")
 
         return vis
-
