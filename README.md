@@ -28,17 +28,17 @@ pip install -r requirements.txt
 
 ## Datasets
 We used the WideIRSTD for both training and testing, SIRST3 only for testing.
-- SIRST3: [download](https://drive.google.com/drive/folders/1NzH4KvpLeILqcchvkkKOdMGUr1svoR2F?usp=sharing)
-- WideIRSTD: [download](https://drive.google.com/drive/folders/18Dxi0eB02WgQDjqTRQKgWhLl9PXgQ0vo?usp=sharing)
+- SIRST3: [[download]](https://drive.google.com/drive/folders/1NzH4KvpLeILqcchvkkKOdMGUr1svoR2F?usp=sharing)
+- WideIRSTD: [[download]](https://drive.google.com/drive/folders/18Dxi0eB02WgQDjqTRQKgWhLl9PXgQ0vo?usp=sharing)
 
 ### Commands for runing demo
-- model weights: [download](https://drive.google.com/file/d/1OQXFtj9GkZ7d10fhi_OsQfgFXkcdc_OP/view)
+- model weights: [[download]](https://drive.google.com/file/d/1OQXFtj9GkZ7d10fhi_OsQfgFXkcdc_OP/view)
 ```
 python demo.py --checkpoint=experiments/WideIRSTD_plainvit_base448/checkpoints/last_checkpoint.pth --gpu=0
 ```
   
 ### Commands for training
-Before training, please download the [MAE](https://github.com/facebookresearch/mae) pretrained weights (click to download: [ViT-Base](https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_base.pth)).
+Before training, please download the [[MAE]](https://github.com/facebookresearch/mae) pretrained weights (click to download: [[ViT-Base]](https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_base.pth)).
 ```
 python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
 --batch-size=8 \
@@ -56,4 +56,5 @@ python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
 
 ## References
 
-- The GUI tools uses [RITM](https://github.com/SamsungLabs/ritm_interactive_segmentation) for interactive image segmentation. This repository also contains a redistribution of their code in `gui/ritm`. That part of code follows RITM's license.
+- The GUI tools uses [[RITM]](https://github.com/SamsungLabs/ritm_interactive_segmentation) for interactive image segmentation. This repository also contains a redistribution of their code in `gui/ritm`. That part of code follows RITM's license.
+- We sincerely appreciate authors of SIRST [[paper]](https://openaccess.thecvf.com/content/WACV2021/papers/Dai_Asymmetric_Contextual_Modulation_for_Infrared_Small_Target_Detection_WACV_2021_paper.pdf), NUDT-SIRST [[paper]](https://ieeexplore.ieee.org/abstract/document/9864119), IRSTD-1K [[paper]](https://ieeexplore.ieee.org/document/9880295) and WideIRSTD [[paper]](https://arxiv.org/pdf/2408.09615)
