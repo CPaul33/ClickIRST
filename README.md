@@ -12,7 +12,7 @@ https://github.com/user-attachments/assets/ed0911a1-95a1-4483-b041-0395353336e6
 
 
 ## Supplementary Video
-In this demo, we showcase the newly added functionalities of this annotation tool: 1) mask check option; 2) post-processing function option; 3) some keyboard shortcuts to facilitate fast annotation.
+In this video, we showcase the newly added functionalities of this annotation tool: 1) mask check option; 2) post-processing function option; 3) some keyboard shortcuts to facilitate fast annotation.
 
 https://github.com/user-attachments/assets/eceef977-763b-406c-9461-5c8df2361cb2
 
