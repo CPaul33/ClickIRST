@@ -1,4 +1,4 @@
-# ClickIRST: Towards Interactive Segmentation for Infrared Small Target
+# ClickIRST: Towards Interactive Segmentation for Infrared Small Target🖱🖱
 
 
 ## Highlight
