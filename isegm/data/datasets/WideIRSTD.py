@@ -22,7 +22,7 @@ class WideIRSTD(ISDataset):
         # self._buggy_mask_thresh = buggy_mask_thresh
 
         with open(os.path.join(self.dataset_path, 'img_idx', f'{split}.txt'), 'r') as f:
-            self.dataset_samples = [x.strip() for x in f.readlines()] # x.strip()返回一个去除字符串 x 首尾空白字符（包括空格、换行符 \n、制表符 \t 等）的新字符串
+            self.dataset_samples = [x.strip() for x in f.readlines()] 
 
     def get_sample(self, index):
         image_name = self.dataset_samples[index]
@@ -107,4 +107,5 @@ class WideIRSTD(ISDataset):
 #             with open(str(pkl_path), 'wb') as fp:
 #                 pkl.dump(images_and_ids_list, fp)
 #
+
 #         return images_and_ids_list
