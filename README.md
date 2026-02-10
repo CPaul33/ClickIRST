@@ -28,6 +28,8 @@ pip install -r requirements.txt
 
 ## Datasets
 We used the WideIRSTD for both training and testing, SIRST3 only for testing.
+- SIRST3: [download](https://drive.google.com/drive/folders/1NzH4KvpLeILqcchvkkKOdMGUr1svoR2F?usp=sharing)
+- WideIRSTD: [download](https://drive.google.com/drive/folders/18Dxi0eB02WgQDjqTRQKgWhLl9PXgQ0vo?usp=sharing)
 
 ### Commands for runing demo
 ```
