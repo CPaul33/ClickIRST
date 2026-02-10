@@ -1,6 +1,12 @@
 # ClickIRST: Towards Interactive Segmentation for Infrared Small Target
 
 
+## Highlight
+ClickIRST is an interactive annotation tool specifically designed for infrared small target (IRST) segmentation. It can be seamlessly integrated into any modern interactive segmentation framework to significantly enhance its suitability for the IRST task. With virtually no additional learnable parameters, the tool introduces no computational overhead, thereby enabling more efficient and accurate IRST annotation.
+
+![overview]()
+
+
 ## Datasets
 We used the WideIRSTD for both training and testing, SIRST3 only for testing.
 
