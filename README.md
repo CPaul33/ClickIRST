@@ -32,6 +32,7 @@ We used the WideIRSTD for both training and testing, SIRST3 only for testing.
 - WideIRSTD: [download](https://drive.google.com/drive/folders/18Dxi0eB02WgQDjqTRQKgWhLl9PXgQ0vo?usp=sharing)
 
 ### Commands for runing demo
+- model weights: [download](https://drive.google.com/file/d/1OQXFtj9GkZ7d10fhi_OsQfgFXkcdc_OP/view)
 ```
 python demo.py --checkpoint=experiments/WideIRSTD_plainvit_base448/checkpoints/last_checkpoint.pth --gpu=0
 ```
