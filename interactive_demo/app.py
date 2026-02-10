@@ -26,7 +26,7 @@ class InteractiveDemoApp(ttk.Frame):
         master.geometry("+%d+%d" % (x, y))
         self.pack(fill="both", expand=True)
 
-        self.brs_modes = ['NoBRS', 'NoBRS-SegNext','RGB-BRS', 'DistMap-BRS', 'f-BRS-A', 'f-BRS-B', 'f-BRS-C']
+        self.brs_modes = ['NoBRS', 'RGB-BRS', 'DistMap-BRS', 'f-BRS-A', 'f-BRS-B', 'f-BRS-C']
         self.limit_longest_size = args.limit_longest_size
 
         self.controller = InteractiveController(model, args.device,
@@ -41,7 +41,6 @@ class InteractiveDemoApp(ttk.Frame):
         self._add_canvas()
         self._add_buttons()
 
-        # 初始化后处理状态
         self.controller.set_postprocessing_enabled(self.state['postprocessing']['enabled'].get())
         self.controller.set_edge_threshold(self.state['postprocessing']['edge_threshold'].get())
 
@@ -93,7 +92,6 @@ class InteractiveDemoApp(ttk.Frame):
             'alpha_blend': tk.DoubleVar(value=0.5),
             'click_radius': tk.IntVar(value=0),
 
-            # 添加后处理功能的状态变量
             'postprocessing': {
                 'enabled': tk.BooleanVar(value=True),
                 'edge_threshold': tk.DoubleVar(value=0.5)
@@ -222,16 +220,13 @@ class InteractiveDemoApp(ttk.Frame):
         FocusHorizontalScale(self.click_radius_frame, from_=0, to=7, resolution=1, command=self._update_click_radius,
                              variable=self.state['click_radius']).pack(padx=10, anchor=tk.CENTER)
 
-        # 添加后处理功能控件
         self.postprocessing_frame = FocusLabelFrame(master, text="Post-processing")
         self.postprocessing_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=3)
 
-        # 后处理启用开关
         FocusCheckButton(self.postprocessing_frame, text='Enable edge extension',
                          command=self._update_postprocessing,
                          variable=self.state['postprocessing']['enabled']).pack(padx=10, pady=2)
 
-        # 边缘阈值滑块
         threshold_frame = tk.Frame(self.postprocessing_frame)
         threshold_frame.pack(fill=tk.X, padx=10, pady=2)
         tk.Label(threshold_frame, text="Edge threshold:").pack(side=tk.LEFT)
@@ -473,7 +468,6 @@ class InteractiveDemoApp(ttk.Frame):
 
     def _update_prob_thresh(self, value):
         if self.controller.is_incomplete_mask:
-            # 使用控制器方法以便在阈值改变时同步触发后处理刷新
             self.controller.set_prob_thresh(self.state['prob_thresh'].get())
             self._update_image()
 
@@ -689,12 +683,10 @@ class InteractiveDemoApp(ttk.Frame):
         return all_checked
 
     def _update_postprocessing(self, *args):
-        # 更新控制器的后处理状态
         self.controller.set_postprocessing_enabled(self.state['postprocessing']['enabled'].get())
         self.controller.set_edge_threshold(self.state['postprocessing']['edge_threshold'].get())
         self._update_image()
 
     def _update_edge_threshold(self, value):
-        # 更新边缘阈值
         self.controller.set_edge_threshold(self.state['postprocessing']['edge_threshold'].get())
         self._update_image()
