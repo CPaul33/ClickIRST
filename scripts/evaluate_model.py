@@ -20,9 +20,7 @@ from isegm.model.modeling.pos_embed import interpolate_pos_embed_inference
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('mode', choices=['NoBRS', 'NoBRS-SegNext', 'RGB-BRS', 'DistMap-BRS',
-                                         'f-BRS-A', 'f-BRS-B', 'f-BRS-C'],
-                        help='')
+    parser.add_argument('mode', default='NoBRS', help='mode')
 
     group_checkpoints = parser.add_mutually_exclusive_group(required=True)
     group_checkpoints.add_argument('--checkpoint', type=str, default='',
