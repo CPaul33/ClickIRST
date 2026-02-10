@@ -21,7 +21,10 @@ https://github.com/user-attachments/assets/eceef977-763b-406c-9461-5c8df2361cb2
 - Press \<Q> / \<E> to switch to previous/next image
 - Press \<Space> to finish current object
 
-
+## Environment
+```
+pip install -r requirements.txt
+```
 
 ## Datasets
 We used the WideIRSTD for both training and testing, SIRST3 only for testing.
