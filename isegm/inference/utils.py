@@ -55,30 +55,8 @@ def load_single_is_model(state_dict, device, eval_ritm, **kwargs):
 
 
 def get_dataset(dataset_name, cfg):
-    if dataset_name == 'GrabCut':
-        dataset = GrabCutDataset(cfg.GRABCUT_PATH)
-    elif dataset_name == 'Berkeley':
-        dataset = BerkeleyDataset(cfg.BERKELEY_PATH)
-    elif dataset_name == 'DAVIS':
-        dataset = DavisDataset(cfg.DAVIS_PATH)
-    elif dataset_name == 'SBD':
-        dataset = SBDEvaluationDataset(cfg.SBD_PATH)
-    elif dataset_name == 'SBD_Train':
-        dataset = SBDEvaluationDataset(cfg.SBD_PATH, split='train')
-    elif dataset_name == 'PascalVOC':
-        dataset = PascalVocDataset(cfg.PASCALVOC_PATH, split='val')
-    elif dataset_name == 'COCO_MVal':
-        dataset = DavisDataset(cfg.COCO_MVAL_PATH)
-    elif dataset_name == 'BraTS':
-        dataset = BraTSDataset(cfg.BraTS_PATH)
-    elif dataset_name == 'ssTEM':
-        dataset = ssTEMDataset(cfg.ssTEM_PATH)
-    elif dataset_name == 'OAIZIB':
-        dataset = OAIZIBDataset(cfg.OAIZIB_PATH)
-    elif dataset_name == 'HARD':
-        dataset = HARDDataset(cfg.HARD_PATH)
-    elif dataset_name == 'SIRST3':
-        dataset = SIRST3Dataset(cfg.SIRST3_PATH, split='val')
+    if dataset_name == 'SIRST3':
+        dataset = SIRST3Dataset(cfg.SIRST3_PATH, split='test')
     elif dataset_name == 'WideIRSTD':
         dataset = WideIRSTD(cfg.WideIRSTD_PATH, split='test')
     else:
