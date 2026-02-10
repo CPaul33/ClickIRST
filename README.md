@@ -7,7 +7,11 @@ ClickIRST is an interactive annotation tool specifically designed for infrared s
 ![overview](assets/Overal_Architecture.png)
 
 ## Demo Video
-https://github.com/CPaul33/ClickIRST/blob/main/assets/demo_.mp4
+
+https://github.com/user-attachments/assets/ed0911a1-95a1-4483-b041-0395353336e6
+
+
+
 
 ## Datasets
 We used the WideIRSTD for both training and testing, SIRST3 only for testing.
