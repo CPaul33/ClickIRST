@@ -15,16 +15,16 @@ except NameError:
 
 
 def _apply_postprocessing_by_edge_gray(image_rgb, original_mask, edge_threshold=0.5):
-    """基于前景平均灰度与外边缘灰度比值的简单后处理扩展。
-    逻辑与交互式控制器中的实现保持一致：
-    - 计算原始前景掩码的平均灰度
-    - 对前景掩码进行一次膨胀，得到紧邻前景的一圈背景像素（outer_border）
-    - 若外边缘像素灰度 / 前景平均灰度 > edge_threshold，则将该像素并入前景
+    """Simple post-processing extension based on the ratio of foreground average gray value to outer edge gray value.
+    The logic is consistent with the implementation in the interactive controller:
+    - Calculate the average gray value of the original foreground mask
+    - Dilate the foreground mask once to get a ring of background pixels immediately adjacent to the foreground (outer_border)
+    - If outer edge pixel gray value / foreground average gray value > edge_threshold, merge that pixel into the foreground
     """
     if image_rgb is None or original_mask is None:
         return original_mask
 
-    # 计算前景平均灰度
+    # Calculate foreground average gray value
     gray_image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2GRAY)
     foreground_pixels = gray_image[original_mask]
 
@@ -36,7 +36,7 @@ def _apply_postprocessing_by_edge_gray(image_rgb, original_mask, edge_threshold=
     if avg_gray_value <= 0:
         return extended_mask
 
-    # 计算外边缘
+    # Calculate outer edge
     kernel = np.ones((3, 3), np.uint8)
     dilated = cv2.dilate(original_mask.astype(np.uint8), kernel, iterations=1).astype(bool)
     outer_border = np.logical_and(dilated, np.logical_not(original_mask))
@@ -53,9 +53,9 @@ def _apply_postprocessing_by_edge_gray(image_rgb, original_mask, edge_threshold=
 
 
 def _enforce_click_constraints(pred_mask, clicks_list):
-    """根据点击类型强制掩码满足期望：
-    - 正样本点击点必须落在前景掩码中
-    - 负样本点击点必须落在背景掩码中
+    """Enforce mask constraints based on click types:
+    - Positive clicks must fall within the foreground mask
+    - Negative clicks must fall within the background mask
     """
     if pred_mask is None or clicks_list is None:
         return pred_mask
@@ -103,25 +103,25 @@ def evaluate_sample(image, gt_mask, predictor, max_iou_thr,
         for click_indx in range(max_clicks):
             clicker.make_next_click(pred_mask)
             pred_probs = predictor.get_prediction(clicker)
-            # 初始掩码
+            # Initial mask
             pred_mask = pred_probs > pred_thr
 
-            # 强制执行点击约束，保证正负点击点达到预期效果，放在后处理前
+            # Enforce click constraints to ensure positive/negative clicks achieve expected effects, placed before post-processing
             pred_mask = _enforce_click_constraints(pred_mask, clicker.clicks_list)
 
-            # 可选后处理：根据图像灰度边缘扩展前景掩码
+            # Optional post-processing: Extend foreground mask based on image gray edges
             if postproc_enabled:
                 try:
                     pred_mask = _apply_postprocessing_by_edge_gray(image, pred_mask, edge_threshold=edge_threshold)
                 except Exception:
-                    # 保底容错：若后处理失败，回退到原始掩码
+                    # Fallback: If post-processing fails, revert to the original mask
                     pred_mask = pred_probs > pred_thr
 
-            # 强制执行点击约束，保证正负点击点达到预期效果，放在后处理前
+            # Enforce click constraints to ensure positive/negative clicks achieve expected effects, placed after post-processing
             pred_mask = _enforce_click_constraints(pred_mask, clicker.clicks_list)
 
             if callback is not None:
-                # 可视化使用概率图与强制后的掩码
+                # Visualization uses probability map and enforced mask
                 callback(image, gt_mask, pred_probs, pred_mask, sample_id, click_indx, clicker.clicks_list)
 
             iou = utils.get_iou(gt_mask, pred_mask)
