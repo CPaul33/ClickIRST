@@ -59,7 +59,6 @@ def parse_args():
     parser.add_argument('--clicks-limit', type=int, default=None)
     parser.add_argument('--eval-mode', type=str, default='cvpr',
                         help="Possible choices: cvpr, fixed<number>, or fixed<number>,<number>,(e.g. fixed400, fixed400,600).")
-
     parser.add_argument('--eval-ritm', action='store_true', default=False)
     parser.add_argument('--save-ious', action='store_true', default=False)
     parser.add_argument('--print-ious', action='store_true', default=False)
@@ -70,7 +69,6 @@ def parse_args():
                         help='The path to the config file.')
     parser.add_argument('--logs-path', type=str, default='',
                         help='The path to the evaluation logs. Default path: cfg.EXPS_PATH/evaluation_logs.')
-    # 添加后处理评估参数
     parser.add_argument('--postproc-enable', action='store_true', default=True,
                         help='Enable post-processing edge extension during evaluation.')
     parser.add_argument('--postproc-edge-thresh', type=float, default=0.9,
@@ -129,7 +127,7 @@ def main():
                                       zoom_in_params=zoomin_params)
 
             vis_callback = get_prediction_vis_callback(logs_path, dataset_name, args.thresh) if args.vis_preds else None
-            # 集成后处理评估：支持对比评估和单次评估
+
             if args.postproc_compare:
                 dataset_results_off = evaluate_dataset(dataset, predictor, pred_thr=args.thresh,
                                                        max_iou_thr=args.target_iou,
@@ -156,7 +154,6 @@ def main():
 
             row_name_base = args.mode if single_model_eval else checkpoint_path.stem
             if args.postproc_compare:
-                # 保存关闭后处理的结果
                 if args.iou_analysis:
                     save_iou_analysis_data(args, dataset_name, logs_path,
                                            logs_prefix, dataset_results_off,
@@ -166,7 +163,6 @@ def main():
                              single_model_eval=single_model_eval,
                              print_header=print_header)
                 print_header = False
-                # 保存开启后处理的结果
                 if args.iou_analysis:
                     save_iou_analysis_data(args, dataset_name, logs_path,
                                            logs_prefix, dataset_results_on,
@@ -277,7 +273,6 @@ def save_results(args, row_name, dataset_name, logs_path, logs_prefix, dataset_r
     iou_thrs = [0.7, 0.8, 0.9]
     noc_list, noc_list_std, over_max_list = utils.compute_noc_metric(all_ious, iou_thrs=iou_thrs, max_clicks=args.n_clicks)
 
-    # 计算第一次点击的 mIoU
     first_click_miou = np.mean([x[0] for x in all_ious if len(x) > 0])
 
     # print(noc_list, noc_list_std)
@@ -357,7 +352,6 @@ def get_prediction_vis_callback(logs_path, dataset_name, prob_thresh):
     def callback(image, gt_mask, pred_probs, pred_mask, sample_id, click_indx, clicks_list):
         sample_path = save_path / f'{sample_id}_{click_indx}.jpg'
         prob_map = draw_probmap(pred_probs)
-        # 使用经过点击约束后的掩码进行可视化，保证正负点击点生效
         image_with_mask = draw_with_blend_and_clicks(image, pred_mask, clicks_list=clicks_list)
         cv2.imwrite(str(sample_path), np.concatenate((image_with_mask, prob_map), axis=1)[:, :, ::-1])
 
