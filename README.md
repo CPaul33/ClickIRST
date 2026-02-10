@@ -15,7 +15,7 @@ python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
 --batch-size=8 \
 --gpus=0,1
 ```
-### Commands for testinging
+### Commands for testing
   ```
   python scripts/evaluate_model.py NoBRS --gpu=0 --checkpoint=experiments/ckick10/checkpoints/last_checkpoint.pth --eval-mode=cvpr --datasets="xxxxxx"
   ```
