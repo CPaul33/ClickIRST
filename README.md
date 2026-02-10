@@ -42,7 +42,7 @@ python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
 ```
 ### Commands for testing
   ```
-  python scripts/evaluate_model.py --gpu=0 --checkpoint=experiments/ckick10/checkpoints/last_checkpoint.pth --eval-mode=cvpr --datasets=SIRST3
+  python scripts/evaluate_model.py --gpu=0 --checkpoint=experiments/ckick10/checkpoints/last_checkpoint.pth --eval-mode=cvpr --datasets=WideIRSTD
   ```
 
   ### Commands for ranking infrared image complexity
