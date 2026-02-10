@@ -50,3 +50,7 @@ python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
   ```
   python scripts/compute_irst_weights.py --dataset_path=WideIRSTD
   ```
+
+## References
+
+- The GUI tools uses [RITM](https://github.com/SamsungLabs/ritm_interactive_segmentation) for interactive image segmentation. This repository also contains a redistribution of their code in `gui/ritm`. That part of code follows RITM's license.
