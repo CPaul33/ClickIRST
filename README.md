@@ -35,6 +35,7 @@ python demo.py --checkpoint=experiments/WideIRSTD_plainvit_base448/checkpoints/l
 ```
   
 ### Commands for training
+Before training, please download the [MAE](https://github.com/facebookresearch/mae) pretrained weights (click to download: [ViT-Base](https://dl.fbaipublicfiles.com/mae/pretrain/mae_pretrain_vit_base.pth)).
 ```
 python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
 --batch-size=8 \
