@@ -24,5 +24,3 @@ python train.py models/plainvit_base/plainvit_base448_WideIRSTD_itermask.py \
   ```
   python scripts/compute_irst_weights.py --dataset_path="xxxxxx"
   ```
-
-  ## More code for other models will be open later
