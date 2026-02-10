@@ -1,0 +1,18 @@
+INTERACTIVE_MODELS_PATH: "./weights"
+EXPS_PATH: "./experiments"
+
+# Evaluation datasets
+SIRST3_PATH: "/root/datasets/SIRST3"
+WideIRSTD_PATH: "/root/datasets/WideIRSTD"
+
+# Train datasets
+SIRST3_PATH: "/root/datasets/SIRST3"
+WideIRSTD_PATH: "/root/datasets/WideIRSTD"
+
+# You can download the weights for MAE from the repository:
+# https://github.com/facebookresearch/mae
+IMAGENET_PRETRAINED_MODELS:
+  MAE_BASE: "./weights/pretrained/mae_pretrain_vit_base.pth"
+  MAE_LARGE: "./weights/pretrained/mae_pretrain_vit_large.pth"
+  MAE_HUGE: "./weights/pretrained/mae_pretrain_vit_huge.pth"
+
