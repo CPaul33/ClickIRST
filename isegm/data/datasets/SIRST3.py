@@ -13,7 +13,7 @@ from isegm.data.sample import DSample
 class SIRST3Dataset(ISDataset):
     def __init__(self, dataset_path, split='train', **kwargs):
         super(SIRST3Dataset, self).__init__(**kwargs)
-        assert split in {'train', 'val'}
+        assert split in {'train', 'test'}
 
         self.dataset_path = Path(dataset_path)
         self.dataset_split = split
@@ -110,3 +110,4 @@ class SIRST3Dataset(ISDataset):
 #
 
 #         return images_and_ids_list
+
