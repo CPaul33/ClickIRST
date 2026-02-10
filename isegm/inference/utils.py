@@ -35,7 +35,6 @@ def load_is_model(checkpoint, device, eval_ritm, **kwargs):
 
 
 def load_single_is_model(state_dict, device, eval_ritm, **kwargs):
-    # 根据 checkpoint 中是否包含 maps_transform 权重，自动对齐 use_rgb_conv 以避免键不匹配
     sd = state_dict['state_dict']
     has_maps_transform = any(k.startswith('maps_transform.') for k in sd.keys())
 
@@ -43,7 +42,6 @@ def load_single_is_model(state_dict, device, eval_ritm, **kwargs):
     try:
         model.load_state_dict(sd, strict=True)
     except RuntimeError:
-        # 严格加载失败（常见于不同版本/配置的轻微不一致），回退为非严格加载
         model.load_state_dict(sd, strict=False)
 
     for param in model.parameters():
@@ -136,7 +134,6 @@ def get_results_table(noc_list, over_max_list, brs_type, dataset_name, mean_spc,
 
     eval_time = str(timedelta(seconds=int(elapsed_time)))
     table_row = f'|{brs_type:^13}|{dataset_name:^11}|'
-    # 1-mIoU 以百分比显示
     if first_click_miou is not None:
         table_row += f'{first_click_miou:^9.2%}|'
     else:
